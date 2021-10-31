@@ -8,14 +8,14 @@
 // To run a particular example, you should remove the comment (//) in
 // front of exactly ONE of the following lines:
 //change made
-#define BUTTON_BLINK
+//#define BUTTON_BLINK
 // #define LIGHT_SCHEDULER
 // #define TIME_RAND
 // #define KEYPAD
 // #define KEYPAD_CONTROL
 // #define SEVEN_SEGMENT
 // #define KEYPAD_SEVEN_SEGMENT
-// #define COLOR_LED
+ #define COLOR_LED
 // #define ROTARY_ENCODER
 // #define ANALOG
 // #define PWM
@@ -51,6 +51,7 @@ int main(void)
 
     // as mentioned above, only one of the following code sections will be used
     // (depending on which of the #define statements at the top of this file has been uncommented)
+}
 
 #ifdef BUTTON_BLINK
     // Wait for the user to push the blue button, then blink the LED.
@@ -140,12 +141,12 @@ int main(void)
 #endif
 
 #ifdef SEVEN_SEGMENT
-    // Display the numbers 0 to 9 inclusive on the 7-segment display, pausing for a second between each one.
+    // Display the numbers 0 to 20000 inclusive on the 7-segment display, pausing for a second between each one.
     // (remember that the GND connection on the display must go through a 220 ohm current-limiting resistor!)
     
     Initialize7Segment();
     while (true)
-        for (int i = 0; i < 10; ++i)
+        for (int i = 0; i < 2000; ++i)
         {
             Display7Segment(i);
             HAL_Delay(1000);  // 1000 milliseconds == 1 second
@@ -171,20 +172,10 @@ int main(void)
 #endif
 
 #ifdef COLOR_LED
-    // Cycle through all 8 possible colors (including off and white) as the on-board button is pressed.
-    // This example assumes that the color LED is connected to pins D11, D12 and D13.
-
-    // Remember that each of those three pins must go through a 220 ohm current-limiting resistor!
-    // Also remember that the longest pin on the LED should be hooked up to GND.
-
     InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // initialize color LED output pins
-    while (true) {
-        for (int color = 0; color < 8; ++color) {
-            // bottom three bits indicate which of the three LEDs should be on (eight possible combinations)
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, color & 0x01);  // blue  (hex 1 == 0001 binary)
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, color & 0x02);  // green (hex 2 == 0010 binary)
+    while (true) { //when button pressed LED will light up
+        for (int color = 3; color < 5; ++color) {
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, color & 0x04);  // red   (hex 4 == 0100 binary)
-
             while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));   // wait for button press 
             while (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));  // wait for button release
         }
@@ -272,4 +263,29 @@ void SysTick_Handler(void)
 {
     HAL_IncTick(); // tell HAL that a new tick has happened
     // we can do other things in here too if we need to, but be careful
+}
+
+
+void SEVEN_SEGMENT(){
+    // Display the numbers 0 to 20000 inclusive on the 7-segment display, pausing for a second between each one.
+    // (remember that the GND connection on the display must go through a 220 ohm current-limiting resistor!)
+    
+    Initialize7Segment();
+    while (true)
+        for (int i = 0; i < 2000; ++i)
+        {
+            Display7Segment(i);
+            HAL_Delay(1000);  // 1000 milliseconds == 1 second
+        }
+}
+
+void Feedback(){
+    InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);  // initialize color LED output pins
+    while (true) { //when button pressed LED will light up
+        for (int color = 3; color < 5; ++color) {
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, color & 0x04);  // red   (hex 4 == 0100 binary)
+            while (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));   // wait for button press 
+            while (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13));  // wait for button release
+        }
+    }
 }

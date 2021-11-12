@@ -8,7 +8,7 @@
 // Each one is surrounded by an #ifdef ... #endif block inside of main().
 // To enable a particular application, you should remove the comment (//) in
 // front of exactly ONE of the following lines:
-#define BUTTON_BLINK
+// #define BUTTON_BLINK
 //#define TIME_RAND
 //#define KEYPAD
 //#define SEVEN_SEGMENT
@@ -16,12 +16,30 @@
 //#define COLOR_LED
 //#define ROTARY_ENCODER
 //#define PWM
+// void led( bool correct );
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
 #include <stdlib.h>  // srand() and random() functions
 
 #include "ece198.h"
+
+//LED FUNCTION THAT TAKES IN BOOL VLAUE TO TURN OF LED
+void led( bool correct ) {
+    //Initialized pins
+    InitializePin(GPIOA, GPIO_PIN_8, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    InitializePin(GPIOB, GPIO_PIN_10, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    
+
+    //IF correctly asnwered, green LED will turn on!
+    if (correct) {
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);    // green
+    }
+    //IF incorrectly answered, red LED will turn on!
+    else {
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);   // red
+    }
+}
 
 int main(void)
 {
@@ -36,16 +54,16 @@ int main(void)
 
     // initialize the pins to be input, output, alternate function, etc
 
-    InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0); // initialize the pin that the on-board LED is on
+    //                  InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0); // initialize the pin that the on-board LED is on
     // note: the on-board pushbutton is fine with default values (input, and no pull-up resistor required since there's one on the board)
 
     // set up for serial communication to the host computer
     // (anything we write to the serial port will appear in the console in VSCode)
-    SerialSetup(9600);
+    //                  SerialSetup(9600);
 
     // as mentioned above, only one of the following code sections will be used
     // (depending on which of the #define statements at the top of this file has been uncommented)
-
+    led(false);
 #ifdef BUTTON_BLINK
     // wait for the user to push the blue button, then blink the LED
 

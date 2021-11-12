@@ -1,4 +1,6 @@
 // Sample code for ECE 198
+//KHUSH AND OMAR
+
 
 // Written by Bernie Roehl, June 2021
 

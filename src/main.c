@@ -42,22 +42,94 @@ void led( bool correct ) {
     }
 }
 
-bool check_answer(char answer[]){
-    return false;
+bool check_answer(char answer[], int q_num){
+    char master_answers[10][8] = {
+                                    {'1', '1', '1', '1', '1', '1', '1', '1'},
+                                    {'1', '1', '1', '1', '1', '1', '1', '0'},
+                                    {'1', '1', '1', '1', '1', '1', '0', '0'},
+                                    {'1', '1', '1', '1', '1', '0', '0', '0'},
+                                    {'1', '1', '1', '1', '0', '0', '0', '0'},
+                                    {'1', '1', '1', '0', '0', '0', '0', '0'},
+                                    {'1', '1', '0', '0', '0', '0', '0', '0'},
+                                    {'1', '0', '0', '0', '0', '0', '0', '0'},
+                                    {'0', '0', '0', '0', '0', '0', '0', '0'},
+                                    {'1', '0', '1', '0', '1', '0', '1', '0'}
+    };
+
+    for (int k=0; k<8; ++k) {
+        if (master_answers[q_num][k] != answer[k]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void input() {
     //led(correct);
-    InitializePin(GPIOA, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    InitializePin(GPIOA, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
 
-    char answer[10] = {'0','1'};
+    char answer[8];
+    int index = 0;
+    int q_num =0;
     
-    //if user presses enter
     while (true) {
+        
+        // enter functionality
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6)) {
-            bool correct = check_answer(answer);
+            bool correct = check_answer(answer, q_num);
+            q_num++;
+            if (q_num == 11) {
+                break;
+            }
             led(correct);
-            break;
+            index=0;
+            HAL_Delay(500);
+        }
+
+        // enter value '1'
+        if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7)) {
+            answer[index] = '1';
+            if (index != 7) {
+                index++;
+            }
+
+            // char buff[1000];
+            // sprintf(buff, answer);
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
+
+            HAL_Delay(500);
+        }
+
+        // enter value '0'
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9)) {
+            answer[index] = '0';
+            if (index != 7) {
+                index++;
+            }
+
+            // char buff[1000];
+            // sprintf(buff, answer);
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
+
+            HAL_Delay(500);
+        }
+
+        // delete value
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) {
+            if (index !=0) {
+                index--;
+                answer[index] = ' ';
+            }
+
+            // char buff[1000];
+            // sprintf(buff, answer);
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
+            
+            HAL_Delay(500);
         }
     }
 }
@@ -81,11 +153,16 @@ int main(void)
 
     // set up for serial communication to the host computer
     // (anything we write to the serial port will appear in the console in VSCode)
-    //                  SerialSetup(9600);
+
+    // SerialSetup(9600);
+    // char buff[1000];
+    // sprintf(buff, "0 Pressed \n");
+    // SerialPuts(buff);
 
     // as mentioned above, only one of the following code sections will be used
     // (depending on which of the #define statements at the top of this file has been uncommented)
     //led(false);
+
     input();
 
 #ifdef BUTTON_BLINK

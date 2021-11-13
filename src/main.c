@@ -23,23 +23,45 @@
 #include <stdlib.h>  // srand() and random() functions
 
 #include "ece198.h"
+#include <TIME.H>
 
 //LED FUNCTION THAT TAKES IN BOOL VLAUE TO TURN OF LED
 void led( bool correct ) {
     //Initialized pins
-    InitializePin(GPIOA, GPIO_PIN_8, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
-    InitializePin(GPIOB, GPIO_PIN_10, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
-    
+    InitializePin(GPIOA, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
 
-    //IF correctly asnwered, green LED will turn on!
-    if (correct) {
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);    // green
-    }
-    //IF incorrectly answered, red LED will turn on!
-    else {
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);   // red
+
+    if (correct){ // green led turns on
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+        HAL_Delay(500);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+    } else { // red led turns on 
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+        HAL_Delay(500);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
     }
 }
+
+bool check_answer(char answer[]){
+    return false;
+}
+
+void input() {
+    //led(correct);
+    InitializePin(GPIOA, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+
+    char answer[10] = {'0','1'};
+    
+    //if user presses enter
+    while (true) {
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6)) {
+            bool correct = check_answer(answer);
+            led(correct);
+            break;
+        }
+    }
+}
+
 
 int main(void)
 {
@@ -63,7 +85,9 @@ int main(void)
 
     // as mentioned above, only one of the following code sections will be used
     // (depending on which of the #define statements at the top of this file has been uncommented)
-    led(false);
+    //led(false);
+    input();
+
 #ifdef BUTTON_BLINK
     // wait for the user to push the blue button, then blink the LED
 

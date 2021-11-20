@@ -72,9 +72,15 @@ void input() {
     char answer[8];
     int index = 0;
     int q_num =0;
+    int timeStart = clock();
+    
     
     while (true) {
         
+        if ((clock() - timeStart) / CLOCKS_PER_SEC >= 5){// time in seconds
+            break;
+        }
+
         // enter functionality
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6)) {
             bool correct = check_answer(answer, q_num);
@@ -134,6 +140,16 @@ void input() {
     }
 }
 
+void Timer(){
+    while (true){
+        char buff[1000];
+        sprintf(buff, "0 Pressed");
+        sprintf(buff, '\n');
+        SerialPuts(buff);
+
+    }
+}
+
 
 int main(void)
 {
@@ -154,7 +170,7 @@ int main(void)
     // set up for serial communication to the host computer
     // (anything we write to the serial port will appear in the console in VSCode)
 
-    // SerialSetup(9600);
+    SerialSetup(9600);
     // char buff[1000];
     // sprintf(buff, "0 Pressed \n");
     // SerialPuts(buff);

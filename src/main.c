@@ -157,6 +157,10 @@ void input()
         }
     }
 }
+
+void beginGame(){
+    
+}
 /*
 void Timer()
 {
@@ -197,9 +201,9 @@ int main(void)
     // (depending on which of the #define statements at the top of this file has been uncommented)
     //led(false);
 
-    input();
-    InitializePin(GPIOB, GPIO_PIN_3 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_8 | GPIO_PIN_4 | GPIO_PIN_10 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
-    LiquidCrystal(GPIOB , GPIO_PIN_3 /*RS*/, GPIO_PIN_2 /*RW*/, GPIO_PIN_5 /*E*/, GPIO_PIN_6 /*D0*/, GPIO_PIN_4 /*D1*/, GPIO_PIN_10 /*D2*/, GPIO_PIN_9 /*D3*/); // display a message on the first row of the 4
+   // input();
+    InitializePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    LiquidCrystal(GPIOB, GPIO_PIN_8 /*G*/, GPIO_PIN_9 /*G*/, GPIO_PIN_10 /*G*/, GPIO_PIN_3 /*G*/,GPIO_PIN_4 /*G*/, GPIO_PIN_5 /*G*/, GPIO_PIN_6);
     setCursor(0, 0);
     print("Hello, world!"); // display a count in the second row of the display
     int n = 0; //counter

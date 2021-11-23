@@ -10,6 +10,11 @@
 
 #include "LiquidCrystal.h"
 
+void LCD_print(char answer[]) {
+    setCursor(0,0);
+    print(answer);
+}
+
 //LED FUNCTION THAT TAKES IN BOOL VLAUE TO TURN OF LED
 void led(bool correct)
 {
@@ -62,7 +67,7 @@ void input()
     InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
     InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
 
-    char answer[8];
+    char answer[8] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
     int index = 0;
     int q_num = 0;
     int timeStart = clock();
@@ -86,41 +91,49 @@ void input()
             }
             led(correct);
             index = 0;
-            HAL_Delay(500);
+
+            clear();
+            for (int k=0; k<8; ++k) {
+                answer[k] = ' ';
+            }
+
+            HAL_Delay(250);
         }
 
         // enter value '1'
         if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7))
         {
             answer[index] = '1';
-            if (index != 7)
+            if (index != 8)
             {
                 index++;
             }
+            LCD_print(answer);
 
-            char buff[1000];
-            sprintf(buff, "press 1\n");
-          //  sprintf(buff, "\n");
-            SerialPuts(buff);
+            // char buff[1000];
+            // sprintf(buff, "press 1\n");
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
 
-            HAL_Delay(500);
+            HAL_Delay(250);
         }
 
         // enter value '0'
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9))
         {
             answer[index] = '0';
-            if (index != 7)
+            if (index != 8)
             {
                 index++;
             }
+            LCD_print(answer);
 
             // char buff[1000];
             // sprintf(buff, answer);
             // sprintf(buff, "\n");
             // SerialPuts(buff);
 
-            HAL_Delay(500);
+            HAL_Delay(250);
         }
 
         // delete value
@@ -131,13 +144,14 @@ void input()
                 index--;
                 answer[index] = ' ';
             }
+            LCD_print(answer);
 
             // char buff[1000];
             // sprintf(buff, answer);
             // sprintf(buff, "\n");
             // SerialPuts(buff);
 
-            HAL_Delay(500);
+            HAL_Delay(250);
         }
     }
 }
@@ -147,7 +161,7 @@ void beginGame(){
     print("Welcome to"); 
     setCursor(0, 1);
     print("Binary Riddle!");// display a count in the second row of the display  
-    HAL_Delay(5000);
+    HAL_Delay(4000);
     clear();
 }
 
@@ -192,10 +206,10 @@ int main(void)
     // (depending on which of the #define statements at the top of this file has been uncommented)
     //led(false);
 
-   // input();
     InitializePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
     LiquidCrystal(GPIOB, GPIO_PIN_8 /*G*/, GPIO_PIN_9 /*G*/, GPIO_PIN_10 /*G*/, GPIO_PIN_3 /*G*/,GPIO_PIN_4 /*G*/, GPIO_PIN_5 /*G*/, GPIO_PIN_6);
     beginGame();
+    input();
 }
 
 void SysTick_Handler(void)

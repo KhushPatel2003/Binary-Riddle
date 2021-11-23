@@ -35,10 +35,15 @@ void GameEnd(int score) {
     }    
 }
 
-void LCD_print(char answer[], int score) {
+void LCD_print(char answer[], int score, int qnum) {
+    setCursor(12,1);
+    print(" ");
+
     char new_score[3];
     sprintf(new_score, "%d", score);
 
+    char new_qnum[2];
+    sprintf(new_qnum, "%d", qnum);
 
     setCursor(0,0);
     print("Score:");
@@ -47,7 +52,27 @@ void LCD_print(char answer[], int score) {
     print(new_score);
 
     setCursor(0,1);
-    print(answer);
+    print("Q");
+
+    if (qnum != 10){
+        setCursor(1,1);
+        print(new_qnum);
+
+        setCursor(2,1);
+        print(":");
+
+        setCursor(3,1);
+        print(answer);
+    } else {
+        setCursor(1,1);
+        print(new_qnum);
+
+        setCursor(3,1);
+        print(":");
+
+        setCursor(4,1);
+        print(answer);
+    }
 }
 
 //LED FUNCTION THAT TAKES IN BOOL VLAUE TO TURN OF LED
@@ -102,12 +127,12 @@ void input()
     InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
     InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
 
-    char answer[8] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    char answer[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
     int index = 0;
     int q_num = 0;
     int score = 0;
 
-    LCD_print(answer, score);
+    LCD_print(answer, score, (q_num+1));
 
     while (true)
     {
@@ -119,7 +144,7 @@ void input()
             
             
             q_num++;
-            if (q_num == 11){
+            if (q_num == 10){
                 GameEnd(score);
                 break;
             }
@@ -132,7 +157,7 @@ void input()
             if (correct){score+=10;}
 
             clear();
-            LCD_print(answer, score);
+            LCD_print(answer, score, (q_num+1));
 
             HAL_Delay(250);
         }
@@ -145,7 +170,7 @@ void input()
             {
                 index++;
             }
-            LCD_print(answer, score);
+            LCD_print(answer, score, (q_num+1));
 
             // char buff[1000];
             // sprintf(buff, "press 1\n");
@@ -163,7 +188,7 @@ void input()
             {
                 index++;
             }
-            LCD_print(answer, score);
+            LCD_print(answer, score, (q_num+1));
 
             // char buff[1000];
             // sprintf(buff, answer);
@@ -187,7 +212,7 @@ void input()
                 answer[index] = ' ';
             }
             */
-            LCD_print(answer, score);
+            LCD_print(answer, score, (q_num+1));
 
             // char buff[1000];
             // sprintf(buff, answer);

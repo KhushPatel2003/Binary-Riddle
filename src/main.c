@@ -143,8 +143,14 @@ void input()
 }
 
 void beginGame(){
-    
+    setCursor(0, 0);
+    print("Welcome to"); 
+    setCursor(0, 1);
+    print("Binary Riddle!");// display a count in the second row of the display  
+    HAL_Delay(5000);
+    clear();
 }
+
 /*
 void Timer()
 {
@@ -157,6 +163,7 @@ void Timer()
     }
 }
 */
+
 int main(void)
 {
     HAL_Init(); // initialize the Hardware Abstraction Layer
@@ -188,22 +195,11 @@ int main(void)
    // input();
     InitializePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
     LiquidCrystal(GPIOB, GPIO_PIN_8 /*G*/, GPIO_PIN_9 /*G*/, GPIO_PIN_10 /*G*/, GPIO_PIN_3 /*G*/,GPIO_PIN_4 /*G*/, GPIO_PIN_5 /*G*/, GPIO_PIN_6);
-    setCursor(0, 0);
-    print("Hello, world!"); // display a count in the second row of the display
-    int n = 0; //counter
-    
-    while(1){
-        // set the cursor to column 0, line 1// (note: line 1 is the second row, since counting begins with 0):
-        setCursor(0, 1); // print an incrementing number
-        char buff[100];sprintf(buff, "%d", n++);
-        print(buff);
-        HAL_Delay(80);
-    }
-        return 0;
+    beginGame();
 }
 
-    void SysTick_Handler(void)
-    {
-        HAL_IncTick(); // tell HAL that a new tick has happened
-        // we can do other things in here too if we need to, but be careful
-    }
+void SysTick_Handler(void)
+{
+    HAL_IncTick(); // tell HAL that a new tick has happened
+    // we can do other things in here too if we need to, but be careful
+}

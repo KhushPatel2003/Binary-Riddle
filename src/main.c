@@ -10,6 +10,31 @@
 
 #include "LiquidCrystal.h"
 
+void GameEnd(int score) {
+
+    clear();
+
+    char new_score[3];
+    sprintf(new_score, "%d", score);
+    setCursor(0,0);
+    print("Score:");
+    setCursor(6,0);
+    print(new_score);
+
+    if (score == 100) {
+        setCursor(0, 1);
+        print("You Won!");
+    }
+    else if (score >= 50) {
+        setCursor(0, 1);
+        print("Nice Try");
+    }
+    else if (score < 50) {
+        setCursor(0, 1);
+        print("You Suck!");
+    }    
+}
+
 void LCD_print(char answer[], int score) {
     char new_score[3];
     sprintf(new_score, "%d", score);
@@ -82,6 +107,8 @@ void input()
     int q_num = 0;
     int score = 0;
 
+    LCD_print(answer, score);
+
     while (true)
     {
         // enter functionality
@@ -92,7 +119,10 @@ void input()
             
             
             q_num++;
-            if (q_num == 11){break;}
+            if (q_num == 11){
+                GameEnd(score);
+                break;
+            }
  
             index = 0;
             for (int k=0; k<8; ++k) {

@@ -10,8 +10,18 @@
 
 #include "LiquidCrystal.h"
 
-void LCD_print(char answer[]) {
+void LCD_print(char answer[], int score) {
+    char new_score[3];
+    sprintf(new_score, "%d", score);
+
+
     setCursor(0,0);
+    print("Score:");
+
+    setCursor(6,0);
+    print(new_score);
+
+    setCursor(0,1);
     print(answer);
 }
 
@@ -67,35 +77,32 @@ void input()
     InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
     InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
 
-    char answer[8] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
+    char answer[8] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
     int index = 0;
     int q_num = 0;
-    int timeStart = clock();
+    int score = 0;
 
     while (true)
     {
-
-        if ((clock() - timeStart) / CLOCKS_PER_SEC >= 5)
-        { // time in seconds
-            break;
-        }
-
         // enter functionality
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6))
         {
             bool correct = check_answer(answer, q_num);
-            q_num++;
-            if (q_num == 11)
-            {
-                break;
-            }
             led(correct);
+            
+            
+            q_num++;
+            if (q_num == 11){break;}
+ 
             index = 0;
-
-            clear();
             for (int k=0; k<8; ++k) {
                 answer[k] = ' ';
             }
+
+            if (correct){score+=10;}
+
+            clear();
+            LCD_print(answer, score);
 
             HAL_Delay(250);
         }
@@ -108,7 +115,7 @@ void input()
             {
                 index++;
             }
-            LCD_print(answer);
+            LCD_print(answer, score);
 
             // char buff[1000];
             // sprintf(buff, "press 1\n");
@@ -126,7 +133,7 @@ void input()
             {
                 index++;
             }
-            LCD_print(answer);
+            LCD_print(answer, score);
 
             // char buff[1000];
             // sprintf(buff, answer);
@@ -138,13 +145,19 @@ void input()
 
         // delete value
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8))
-        {
-            if (index != 0)
+        { 
+            if (index != 0){
+                index--;
+                answer[index]= ' ';
+            } 
+            /*
+            else if (index != 0)
             {
                 index--;
                 answer[index] = ' ';
             }
-            LCD_print(answer);
+            */
+            LCD_print(answer, score);
 
             // char buff[1000];
             // sprintf(buff, answer);

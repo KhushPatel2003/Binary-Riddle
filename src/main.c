@@ -7,8 +7,233 @@
 
 #include "ece198.h"
 #include <TIME.H>
+#include <time.h>
 
 #include "LiquidCrystal.h"
+void Timer() {
+    int start_time_secs = 604;
+    int start_time_mins = 10;
+    int current_mins = 0;
+    int current_millisecs = 0;
+    int current_secs = 0;
+    int conditional_time = 0;
+    while (true) {
+        current_secs = HAL_GetTick()/1000;
+        current_secs = start_time_secs - current_secs;
+        if (current_secs >= 600) {
+            setCursor(11,0);
+            print("10");
+
+            conditional_time = current_secs - 600;
+            char new_time[1];
+            sprintf(new_time, "%d", conditional_time);
+            setCursor(14,0);
+            print(new_time);
+        }
+        if ((600 > current_secs) && (current_secs >= 540)) {
+            setCursor(11,0);
+            print("09");
+
+            conditional_time = current_secs - 540;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((540 > current_secs) && (current_secs >= 480)) {
+            setCursor(11,0);
+            print("08");
+
+            conditional_time = current_secs - 480;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((480 > current_secs) && (current_secs >= 420)) {
+            setCursor(11,0);
+            print("07");
+
+            conditional_time = current_secs - 420;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((420 > current_secs) && (current_secs >= 360)) {
+            setCursor(11,0);
+            print("06");
+
+            conditional_time = current_secs - 360;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((360 > current_secs) && (current_secs >= 300)) {
+            setCursor(11,0);
+            print("05");
+
+            conditional_time = current_secs - 300;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((300 > current_secs) && (current_secs >= 240)) {
+            setCursor(11,0);
+            print("04");
+
+            conditional_time = current_secs - 240;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((240 > current_secs) && (current_secs >= 180)) {
+            setCursor(11,0);
+            print("03");
+
+            conditional_time = current_secs - 180;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((180 > current_secs) && (current_secs >= 120)) {
+            setCursor(11,0);
+            print("02");
+
+            conditional_time = current_secs - 120;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((120 > current_secs) && (current_secs >= 60)) {
+            setCursor(11,0);
+            print("01");
+
+            conditional_time = current_secs - 60;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        if ((60 > current_secs) && (current_secs >= 0)) {
+            setCursor(11,0);
+            print("00");
+
+            conditional_time = current_secs - 0;
+            if (conditional_time < 10) {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print("0");
+                setCursor(15,0);
+                print(new_time);
+            }
+            else {
+                char new_time[1];
+                sprintf(new_time, "%d", conditional_time);
+                setCursor(14,0);
+                print(new_time);
+            }
+        }
+        setCursor(13,0);
+        print(":");
+    }
+}
 
 void GameEnd(int score) {
 
@@ -136,6 +361,7 @@ void input()
 
     while (true)
     {
+        Timer();
         // enter functionality
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6))
         {

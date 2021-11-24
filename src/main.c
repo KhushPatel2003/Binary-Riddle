@@ -11,6 +11,7 @@
 
 #include "LiquidCrystal.h"
 
+//When the Game is ended, this function will call!
 void GameEnd(int score) {
 
     clear();
@@ -22,6 +23,7 @@ void GameEnd(int score) {
     setCursor(6,0);
     print(new_score);
 
+    //Messages sent from code to user depending on thier score
     if (score == 100) {
         setCursor(0, 1);
         print("You Won!");
@@ -36,6 +38,7 @@ void GameEnd(int score) {
     }    
 }
 
+//This will print to the LCD the current score, time and question number
 void LCD_print(char answer[], int score, int qnum) {
     setCursor(12,1);
     print(" ");
@@ -96,6 +99,7 @@ void led(bool correct)
     }
 }
 
+//Recieves charcter array and question number, then determines if the answer is right based on 2D array which holds all master answers.
 bool check_answer(char answer[], int q_num)
 {
     char master_answers[10][8] = {

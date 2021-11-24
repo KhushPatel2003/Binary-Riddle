@@ -10,14 +10,226 @@
 #include <time.h>
 
 #include "LiquidCrystal.h"
-void Timer() {
-    int start_time_secs = 604;
+
+void GameEnd(int score) {
+
+    clear();
+
+    char new_score[3];
+    sprintf(new_score, "%d", score);
+    setCursor(0,0);
+    print("Score:");
+    setCursor(6,0);
+    print(new_score);
+
+    if (score == 100) {
+        setCursor(0, 1);
+        print("You Won!");
+    }
+    else if (score >= 50) {
+        setCursor(0, 1);
+        print("Nice Try");
+    }
+    else if (score < 50) {
+        setCursor(0, 1);
+        print("You Suck!");
+    }    
+}
+
+void LCD_print(char answer[], int score, int qnum) {
+    setCursor(12,1);
+    print(" ");
+
+    char new_score[3];
+    sprintf(new_score, "%d", score);
+
+    char new_qnum[2];
+    sprintf(new_qnum, "%d", qnum);
+
+    setCursor(0,0);
+    print("Score:");
+
+    setCursor(6,0);
+    print(new_score);
+
+    setCursor(0,1);
+    print("Q");
+
+    if (qnum != 10){
+        setCursor(1,1);
+        print(new_qnum);
+
+        setCursor(2,1);
+        print(":");
+
+        setCursor(3,1);
+        print(answer);
+    } else {
+        setCursor(1,1);
+        print(new_qnum);
+
+        setCursor(3,1);
+        print(":");
+
+        setCursor(4,1);
+        print(answer);
+    }
+}
+
+//LED FUNCTION THAT TAKES IN BOOL VLAUE TO TURN OF LED
+void led(bool correct)
+{
+    //Initialized pins
+    InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+
+    if (correct)
+    { // green led turns on
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+        HAL_Delay(500);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+    }
+    else
+    { // red led turns on
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+        HAL_Delay(500);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+    }
+}
+
+bool check_answer(char answer[], int q_num)
+{
+    char master_answers[10][8] = {
+        {'0', '0', '1', '1', '0', '0', '0', '1'}, //Q1
+        {'0', '0', '0', '0', '1', '1', '0', '0'}, //Q2
+        {'0', '0', '0', '0', '0', '1', '1', '1'}, //Q3
+        {'0', '0', '1', '1', '0', '1', '1', '1'}, //Q4
+        {'0', '0', '0', '0', '0', '0', '1', '0'}, //Q5
+        {'0', '0', '0', '0', '0', '0', '0', '0'}, //Q6
+        {'0', '0', '0', '0', '0', '0', '0', '1'}, //Q7
+        {'0', '1', '0', '0', '0', '1', '1', '0'}, //Q8
+        {'0', '0', '0', '0', '0', '1', '0', '0'}, //Q9
+        {'0', '0', '0', '0', '1', '0', '0', '0'}  //Q10
+    };
+
+    for (int k = 0; k < 8; ++k)
+    {
+        if (master_answers[q_num][k] != answer[k])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void input()
+{
+    //led(correct);
+    InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+
+    char answer[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    int index = 0;
+    int q_num = 0;
+    int score = 0;
+
+    int start_time_secs = 15;
     int start_time_mins = 10;
     int current_mins = 0;
     int current_millisecs = 0;
     int current_secs = 0;
     int conditional_time = 0;
-    while (true) {
+
+    LCD_print(answer, score, (q_num+1));
+
+    while (true)
+    {
+        // enter functionality
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6))
+        {
+            bool correct = check_answer(answer, q_num);
+            led(correct);
+            
+            
+            q_num++;
+            if (q_num == 10){
+                GameEnd(score);
+                break;
+            }
+ 
+            index = 0;
+            for (int k=0; k<8; ++k) {
+                answer[k] = ' ';
+            }
+
+            if (correct){score+=10;}
+
+            clear();
+            LCD_print(answer, score, (q_num+1));
+
+            HAL_Delay(250);
+        }
+
+        // enter value '1'
+        if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7))
+        {
+            answer[index] = '1';
+            if (index != 8)
+            {
+                index++;
+            }
+            LCD_print(answer, score, (q_num+1));
+
+            // char buff[1000];
+            // sprintf(buff, "press 1\n");
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
+
+            HAL_Delay(250);
+        }
+
+        // enter value '0'
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9))
+        {
+            answer[index] = '0';
+            if (index != 8)
+            {
+                index++;
+            }
+            LCD_print(answer, score, (q_num+1));
+
+            // char buff[1000];
+            // sprintf(buff, answer);
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
+
+            HAL_Delay(250);
+        }
+
+        // delete value
+        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8))
+        { 
+            if (index != 0){
+                index--;
+                answer[index]= ' ';
+            } 
+            /*
+            else if (index != 0)
+            {
+                index--;
+                answer[index] = ' ';
+            }
+            */
+            LCD_print(answer, score, (q_num+1));
+
+            // char buff[1000];
+            // sprintf(buff, answer);
+            // sprintf(buff, "\n");
+            // SerialPuts(buff);
+
+            HAL_Delay(250);
+        }
+
         current_secs = HAL_GetTick()/1000;
         current_secs = start_time_secs - current_secs;
         if (current_secs >= 600) {
@@ -232,220 +444,15 @@ void Timer() {
         }
         setCursor(13,0);
         print(":");
-    }
-}
-
-void GameEnd(int score) {
-
-    clear();
-
-    char new_score[3];
-    sprintf(new_score, "%d", score);
-    setCursor(0,0);
-    print("Score:");
-    setCursor(6,0);
-    print(new_score);
-
-    if (score == 100) {
-        setCursor(0, 1);
-        print("You Won!");
-    }
-    else if (score >= 50) {
-        setCursor(0, 1);
-        print("Nice Try");
-    }
-    else if (score < 50) {
-        setCursor(0, 1);
-        print("You Suck!");
-    }    
-}
-
-void LCD_print(char answer[], int score, int qnum) {
-    setCursor(12,1);
-    print(" ");
-
-    char new_score[3];
-    sprintf(new_score, "%d", score);
-
-    char new_qnum[2];
-    sprintf(new_qnum, "%d", qnum);
-
-    setCursor(0,0);
-    print("Score:");
-
-    setCursor(6,0);
-    print(new_score);
-
-    setCursor(0,1);
-    print("Q");
-
-    if (qnum != 10){
-        setCursor(1,1);
-        print(new_qnum);
-
-        setCursor(2,1);
-        print(":");
-
-        setCursor(3,1);
-        print(answer);
-    } else {
-        setCursor(1,1);
-        print(new_qnum);
-
-        setCursor(3,1);
-        print(":");
-
-        setCursor(4,1);
-        print(answer);
-    }
-}
-
-//LED FUNCTION THAT TAKES IN BOOL VLAUE TO TURN OF LED
-void led(bool correct)
-{
-    //Initialized pins
-    InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
-
-    if (correct)
-    { // green led turns on
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-        HAL_Delay(500);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-    }
-    else
-    { // red led turns on
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-        HAL_Delay(500);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
-    }
-}
-
-bool check_answer(char answer[], int q_num)
-{
-    char master_answers[10][8] = {
-        {'0', '0', '1', '1', '0', '0', '0', '1'}, //Q1
-        {'0', '0', '0', '0', '1', '1', '0', '0'}, //Q2
-        {'0', '0', '0', '0', '0', '1', '1', '1'}, //Q3
-        {'0', '0', '1', '1', '0', '1', '1', '1'}, //Q4
-        {'0', '0', '0', '0', '0', '0', '1', '0'}, //Q5
-        {'0', '0', '0', '0', '0', '0', '0', '0'}, //Q6
-        {'0', '0', '0', '0', '0', '0', '0', '1'}, //Q7
-        {'0', '1', '0', '0', '0', '1', '1', '0'}, //Q8
-        {'0', '0', '0', '0', '0', '1', '0', '0'}, //Q9
-        {'0', '0', '0', '0', '1', '0', '0', '0'}  //Q10
-    };
-
-    for (int k = 0; k < 8; ++k)
-    {
-        if (master_answers[q_num][k] != answer[k])
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void input()
-{
-    //led(correct);
-    InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
-    InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
-
-    char answer[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
-    int index = 0;
-    int q_num = 0;
-    int score = 0;
-
-    LCD_print(answer, score, (q_num+1));
-
-    while (true)
-    {
-        Timer();
-        // enter functionality
-        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6))
-        {
-            bool correct = check_answer(answer, q_num);
-            led(correct);
-            
-            
-            q_num++;
-            if (q_num == 10){
-                GameEnd(score);
-                break;
-            }
- 
-            index = 0;
-            for (int k=0; k<8; ++k) {
-                answer[k] = ' ';
-            }
-
-            if (correct){score+=10;}
-
+        if (current_secs < 0) {
             clear();
-            LCD_print(answer, score, (q_num+1));
-
-            HAL_Delay(250);
-        }
-
-        // enter value '1'
-        if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7))
-        {
-            answer[index] = '1';
-            if (index != 8)
-            {
-                index++;
-            }
-            LCD_print(answer, score, (q_num+1));
-
-            // char buff[1000];
-            // sprintf(buff, "press 1\n");
-            // sprintf(buff, "\n");
-            // SerialPuts(buff);
-
-            HAL_Delay(250);
-        }
-
-        // enter value '0'
-        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9))
-        {
-            answer[index] = '0';
-            if (index != 8)
-            {
-                index++;
-            }
-            LCD_print(answer, score, (q_num+1));
-
-            // char buff[1000];
-            // sprintf(buff, answer);
-            // sprintf(buff, "\n");
-            // SerialPuts(buff);
-
-            HAL_Delay(250);
-        }
-
-        // delete value
-        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8))
-        { 
-            if (index != 0){
-                index--;
-                answer[index]= ' ';
-            } 
-            /*
-            else if (index != 0)
-            {
-                index--;
-                answer[index] = ' ';
-            }
-            */
-            LCD_print(answer, score, (q_num+1));
-
-            // char buff[1000];
-            // sprintf(buff, answer);
-            // sprintf(buff, "\n");
-            // SerialPuts(buff);
-
-            HAL_Delay(250);
+            setCursor(0,0);
+            print("Times Up,");
+            setCursor(6,1);
+            print("Granny!");
+            HAL_Delay(4000);
+            clear();
+            break;
         }
     }
 }
@@ -458,19 +465,6 @@ void beginGame(){
     HAL_Delay(4000);
     clear();
 }
-
-/*
-void Timer()
-{
-    while (true)
-    {
-        char buff[1000];
-        sprintf(buff, "0 Pressed");
-        sprintf(buff, '\n');
-        SerialPuts(buff);
-    }
-}
-*/
 
 int main(void)
 {

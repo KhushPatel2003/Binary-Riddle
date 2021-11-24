@@ -133,7 +133,7 @@ void input()
     int q_num = 0;
     int score = 0;
 
-    int start_time_secs = 15;
+    int start_time_secs = 604;
     int start_time_mins = 10;
     int current_mins = 0;
     int current_millisecs = 0;

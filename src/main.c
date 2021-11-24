@@ -1,5 +1,4 @@
-// Sample code for ECE 198
-//KHUSH AND OMAR
+//KHUSH AND OMER
 
 #include <stdbool.h> // booleans, i.e. true and false
 #include <stdio.h>   // sprintf() function
@@ -13,26 +12,29 @@
 
 //When the Game is ended, this function will call!
 void GameEnd(int score) {
-
+    //clear the screen
     clear();
 
+    //initalize character array to store int score
     char new_score[3];
     sprintf(new_score, "%d", score);
+    
+    //display score to screen
     setCursor(0,0);
     print("Score:");
     setCursor(6,0);
     print(new_score);
 
     //Messages sent from code to user depending on thier score
-    if (score == 100) {
+    if (score == 100) { //highest
         setCursor(0, 1);
         print("You Won!");
     }
-    else if (score >= 50) {
+    else if (score >= 50) { //medium
         setCursor(0, 1);
         print("Nice Try");
     }
-    else if (score < 50) {
+    else if (score < 50) { //poor 
         setCursor(0, 1);
         print("You Suck!");
     }    
@@ -43,18 +45,22 @@ void LCD_print(char answer[], int score, int qnum) {
     setCursor(12,1);
     print(" ");
 
+    //convert int score to char array
     char new_score[3];
     sprintf(new_score, "%d", score);
 
+    //convert q# to char array
     char new_qnum[2];
     sprintf(new_qnum, "%d", qnum);
 
+    //print score
     setCursor(0,0);
     print("Score:");
 
     setCursor(6,0);
     print(new_score);
 
+    //print question number 
     setCursor(0,1);
     print("Q");
 
@@ -65,6 +71,7 @@ void LCD_print(char answer[], int score, int qnum) {
         setCursor(2,1);
         print(":");
 
+        //print answer
         setCursor(3,1);
         print(answer);
     } else {
@@ -74,6 +81,7 @@ void LCD_print(char answer[], int score, int qnum) {
         setCursor(3,1);
         print(":");
 
+        //print answer
         setCursor(4,1);
         print(answer);
     }
@@ -101,7 +109,8 @@ void led(bool correct)
 
 //Recieves charcter array and question number, then determines if the answer is right based on 2D array which holds all master answers.
 bool check_answer(char answer[], int q_num)
-{
+{   
+    //answer array containing all answers
     char master_answers[10][8] = {
         {'0', '0', '1', '1', '0', '0', '0', '1'}, //Q1
         {'0', '0', '0', '0', '1', '1', '0', '0'}, //Q2
@@ -115,28 +124,36 @@ bool check_answer(char answer[], int q_num)
         {'0', '0', '0', '0', '1', '0', '0', '0'}  //Q10
     };
 
+    //compare answer to solution
     for (int k = 0; k < 8; ++k)
-    {
+    {   
+        //see if any digits do not match each other
         if (master_answers[q_num][k] != answer[k])
         {
+            //return false if answer and solution are not the same
             return false;
         }
     }
 
+    //return true if the answer and solution is the smae
     return true;
 }
 
-void input()
+void game_loop()
 {
-    //led(correct);
+    //initalize pins used in main loop
     InitializePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
     InitializePin(GPIOC, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
 
+    //answer array that user will be inputting their characters into 
     char answer[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    //current index that the user is on 
     int index = 0;
+    //what number the question is on 
     int q_num = 0;
     int score = 0;
 
+    //timer-related variables
     int start_time_secs = 604;
     int start_time_mins = 10;
     int current_mins = 0;
@@ -144,96 +161,101 @@ void input()
     int current_secs = 0;
     int conditional_time = 0;
 
+    //display initial state of game ie. answer = '', score = 0 
     LCD_print(answer, score, (q_num+1));
 
     while (true)
     {
-        // enter functionality
+        // if enter is pressed button 
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_6))
         {
+            //check if answer is corrrect
             bool correct = check_answer(answer, q_num);
+            //output corresponding color based on answer
             led(correct);
+
+            //increment score if won
+            if (correct){
+                score+=10;
+            }
             
-            
+            //move to next answer
             q_num++;
+            //if its reached the end of the list
             if (q_num == 10){
+                //end of the game, display final score and break from loop
                 GameEnd(score);
                 break;
             }
  
+            //reset answer array for new user inputs 
             index = 0;
             for (int k=0; k<8; ++k) {
                 answer[k] = ' ';
             }
 
-            if (correct){score+=10;}
-
+            //clear lcd display and print out updated info to screen
             clear();
             LCD_print(answer, score, (q_num+1));
 
+            //delay to factor in button press length
             HAL_Delay(250);
         }
 
-        // enter value '1'
+        // entered value '1' button
         if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7))
         {
+            //set the current spot in answer array to 1
             answer[index] = '1';
+
+            //makes sure that array does not go out of bounds
             if (index != 8)
-            {
+            {   //move to next spot in array
                 index++;
             }
+            //print updated result
             LCD_print(answer, score, (q_num+1));
 
-            // char buff[1000];
-            // sprintf(buff, "press 1\n");
-            // sprintf(buff, "\n");
-            // SerialPuts(buff);
-
+            //delay to facotr in button press length
             HAL_Delay(250);
         }
 
-        // enter value '0'
+        // enter value '0' button
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9))
         {
+            //sets current answer index to zero
             answer[index] = '0';
+            //moves to next spot in answer array
             if (index != 8)
             {
+                //move up an index
                 index++;
             }
+            //print out updated results 
             LCD_print(answer, score, (q_num+1));
 
-            // char buff[1000];
-            // sprintf(buff, answer);
-            // sprintf(buff, "\n");
-            // SerialPuts(buff);
-
+            //delay to factor in length of button press
             HAL_Delay(250);
         }
 
-        // delete value
+        // delete value button 
         if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8))
         { 
+            //if not on last index to avoid index error
             if (index != 0){
+                //move back an index
                 index--;
+                //sets value to empty
                 answer[index]= ' ';
             } 
-            /*
-            else if (index != 0)
-            {
-                index--;
-                answer[index] = ' ';
-            }
-            */
+            //print updated value
             LCD_print(answer, score, (q_num+1));
 
-            // char buff[1000];
-            // sprintf(buff, answer);
-            // sprintf(buff, "\n");
-            // SerialPuts(buff);
-
+            //delay to factor in length of button press
             HAL_Delay(250);
         }
 
+        //Timer function -> 
         current_secs = HAL_GetTick()/1000;
         current_secs = start_time_secs - current_secs;
         if (current_secs >= 600) {
@@ -462,10 +484,12 @@ void input()
 }
 
 void beginGame(){
+    //print text to screen
     setCursor(0, 0);
     print("Welcome to"); 
     setCursor(0, 1);
-    print("Binary Riddle!");// display a count in the second row of the display  
+    print("Binary Riddle!");
+    //display for 4 seconds then erase
     HAL_Delay(4000);
     clear();
 }
@@ -474,34 +498,20 @@ int main(void)
 {
     HAL_Init(); // initialize the Hardware Abstraction Layer
 
-    // Peripherals (including GPIOs) are disabled by default to save power, so we
-    // use the Reset and Clock Control registers to enable the GPIO peripherals we're using.
-
     __HAL_RCC_GPIOA_CLK_ENABLE(); // enable port A (for the on-board LED, for example)
     __HAL_RCC_GPIOB_CLK_ENABLE(); // enable port B (for the rotary encoder inputs, for example)
     __HAL_RCC_GPIOC_CLK_ENABLE(); // enable port C (for the on-board blue pushbutton, for example)
 
-    // initialize the pins to be input, output, alternate function, etc
-
-    //                  InitializePin(GPIOA, GPIO_PIN_5, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0); // initialize the pin that the on-board LED is on
-    // note: the on-board pushbutton is fine with default values (input, and no pull-up resistor required since there's one on the board)
-
-    // set up for serial communication to the host computer
-    // (anything we write to the serial port will appear in the console in VSCode)
-
     SerialSetup(9600);
-    // char buff[1000];
-    // sprintf(buff, "0 Pressed \n");
-    // SerialPuts(buff);
 
-    // as mentioned above, only one of the following code sections will be used
-    // (depending on which of the #define statements at the top of this file has been uncommented)
-    //led(false);
-
+    //initialize pins used in code for LEDs and buttons
     InitializePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, 0);
+    //initialize LCD screen
     LiquidCrystal(GPIOB, GPIO_PIN_8 /*G*/, GPIO_PIN_9 /*G*/, GPIO_PIN_10 /*G*/, GPIO_PIN_3 /*G*/,GPIO_PIN_4 /*G*/, GPIO_PIN_5 /*G*/, GPIO_PIN_6);
+    //begin the game animation screen
     beginGame();
-    input();
+    //run main loop
+    game_loop();
 }
 
 void SysTick_Handler(void)
@@ -509,4 +519,3 @@ void SysTick_Handler(void)
     HAL_IncTick(); // tell HAL that a new tick has happened
     // we can do other things in here too if we need to, but be careful
 }
-//comment added

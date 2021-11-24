@@ -1,0 +1,52 @@
+User Manual - Binary Riddle 
+Group 32 - Designed by Omer Adeel and Khush Patel
+
+Introduction:
+“Binary Riddle” is a twist on one of the many escape room puzzles designed to test individuals' problem-solving skills.
+As technology is revolutionizing the day-to-day world, implementing a technical aspect to puzzles can help create more 
+opportunities for how puzzles are made. Binary Riddle uses binary to add another layer of problem-solving to simple riddles.
+Binary is a crucial, base-level language composed of 0s and 1s used by computers to carry out all its functions. Binary Riddle 
+will begin by asking the player a set of challenging puzzles that they have to answer within the allotted time limit. As Binary 
+Riddle uses binary, the users must answer all riddles in binary digits, creating extra complexity. 
+
+Instructions: 
+The game will query you on riddles ranging from difficulty, easy to challenging. A display board will prompt said questions to 
+the user where the user will have ten quick minutes to solve ten problems at hand and leave their final answers in binary digits. 
+To solve each problem, you will need access to the binary translation sheet that you will find hidden in the escape room. The game 
+has 4 keys for the user to interact with, keys “1”, “0”, “delete” & “enter”. You can use the 1 and 0 keys to enter the desired binary 
+digits to solve the riddles, the delete key to modify the answer, and lastly, the enter key to check if their answer to the problem is
+correct.  All answers must be left in 8 binary digits. Good luck!
+
+
+Questions:
+Q1: If Mary is twice the age of her sister Anne when Mary is 2 years old. When Mary is 50 years old, how old is Anne? 
+
+Q2: Solve the following: 5x +20 = 80. Input X?
+
+Q3: What number is odd, a multiple of 21, and is between the numbers 5 and 10? 
+
+Q4: What is the 11th term in fibonacci sequence?  
+
+Q5: If there are three apples and you take away two, how many apples do you have?
+
+Q6: If you multiply this number by any other number, the answer will always be the same. What number is this?
+
+Q7: A boy blows 18 bubbles, then pops 6 eats 7, And then he pops 5 and blows 1. How many are left? 
+
+Q8: If you divide thirty by half, and add ten, what do you get?
+
+Q9: You’re sitting down for breakfast and realize you have 4 bagels left. You know you’ll run out in four days so you cut them in half. How many bagels do you have now?
+
+Q10: What number can you subtract half from to obtain a result of zero?
+
+Answers: 
+A1: 49
+A2: 12
+A3: 7
+A4: 55
+A5: 2
+A6: 0
+A7: 1
+A8: 70
+A9: 4
+A10: 8.  It's made up of two zeros, one on top of the other.

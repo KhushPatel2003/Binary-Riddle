@@ -40,13 +40,13 @@ Q9: You’re sitting down for breakfast and realize you have 4 bagels left. You 
 Q10: What number can you subtract half from to obtain a result of zero?
 
 Answers: 
-A1: 49
-A2: 12
-A3: 7
-A4: 55
-A5: 2
-A6: 0
-A7: 1
-A8: 70
-A9: 4
-A10: 8.  It's made up of two zeros, one on top of the other.
+A1: 49 [00110001]
+A2: 12 [00001100]
+A3: 7 [00000111]
+A4: 55 [00110111]
+A5: 2 [00000010]
+A6: 0 [00000000]
+A7: 1 [00000001]
+A8: 70 [01000110]
+A9: 4 [00000100]
+A10: 8. [00001000] It's made up of two zeros, one on top of the other.

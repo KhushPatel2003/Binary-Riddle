@@ -256,228 +256,304 @@ void game_loop()
         }
 
         //Timer function -> 
+        //This determines how many seconds have passed since the start of the program
         current_secs = HAL_GetTick()/1000;
+        //This determines how mnay seconds left till 10 minutes are over
         current_secs = start_time_secs - current_secs;
+        
+        //Time is greater than 10 minutes then this will handle the corresponding time
         if (current_secs >= 600) {
+            //prints the minute indicator as 10
             setCursor(11,0);
             print("10");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 600;
+
+            //updates the new time and prints to LCD display
             char new_time[1];
-            sprintf(new_time, "%d", conditional_time);
+            sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
             setCursor(14,0);
             print(new_time);
         }
+
+        //Time is greater than 9 minutes then this will handle the corresponding time
         if ((600 > current_secs) && (current_secs >= 540)) {
+            //prints the minute indicator as 9
             setCursor(11,0);
             print("09");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 540;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 8 minutes then this will handle the corresponding time
         if ((540 > current_secs) && (current_secs >= 480)) {
+            //prints the minute indicator as 8
             setCursor(11,0);
             print("08");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 480;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 7 minutes then this will handle the corresponding time
         if ((480 > current_secs) && (current_secs >= 420)) {
+            //prints the minute indicator as 7
             setCursor(11,0);
             print("07");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 420;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 6 minutes then this will handle the corresponding time
         if ((420 > current_secs) && (current_secs >= 360)) {
+            //prints the minute indicator as 6
             setCursor(11,0);
             print("06");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 360;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 5 minutes then this will handle the corresponding time
         if ((360 > current_secs) && (current_secs >= 300)) {
+            //prints the minute indicator as 5
             setCursor(11,0);
             print("05");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 300;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 4 minutes then this will handle the corresponding time
         if ((300 > current_secs) && (current_secs >= 240)) {
+            //prints the minute indicator as 4
             setCursor(11,0);
             print("04");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 240;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 3 minutes then this will handle the corresponding time
         if ((240 > current_secs) && (current_secs >= 180)) {
+            //prints the minute indicator as 3
             setCursor(11,0);
             print("03");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 180;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 2 minutes then this will handle the corresponding time
         if ((180 > current_secs) && (current_secs >= 120)) {
+            //prints the minute indicator as 2
             setCursor(11,0);
             print("02");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 120;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is greater than 1 minutes then this will handle the corresponding time
         if ((120 > current_secs) && (current_secs >= 60)) {
+            //prints the minute indicator as 1
             setCursor(11,0);
             print("01");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 60;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Time is less than 1 minute then this will handle the corresponding time
         if ((60 > current_secs) && (current_secs >= 0)) {
+            //prints the minute indicator as 0
             setCursor(11,0);
             print("00");
 
+            //Math behind how to get 60 seocnd intervals 
             conditional_time = current_secs - 0;
             if (conditional_time < 10) {
+                //updates the new time if less than 10 seoncds so it is correctly displayed on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print("0");
                 setCursor(15,0);
                 print(new_time);
             }
             else {
+                //updates the new time if more than 10 seocnds so it correctly displays on screen
                 char new_time[1];
-                sprintf(new_time, "%d", conditional_time);
+                sprintf(new_time, "%d", conditional_time); //Converts int to char array as LCD screen only accepts char arrays
                 setCursor(14,0);
                 print(new_time);
             }
         }
+
+        //Makes a clear line between the minutes and seconds with a semi colon 
         setCursor(13,0);
         print(":");
+
+        //if the time of 10 minutes runs out and the chnage in seconds between start time and set is below zero terminaet the program
         if (current_secs < 0) {
             clear();
+
+            //print a message saying that the user is too slow!
             setCursor(0,0);
             print("Times Up,");
             setCursor(6,1);
             print("Granny!");
             HAL_Delay(4000);
             clear();
+
+            //terminate the program aka break out of the while loop!
             break;
         }
     }
